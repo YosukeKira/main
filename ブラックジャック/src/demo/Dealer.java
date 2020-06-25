@@ -1,4 +1,4 @@
-package list;
+package demo;
 
 public class Dealer extends People {
 

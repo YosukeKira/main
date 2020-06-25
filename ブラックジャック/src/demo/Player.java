@@ -1,4 +1,4 @@
-package list;
+package demo;
 
 public class Player extends People {
 
@@ -31,7 +31,6 @@ public class Player extends People {
 					System.out.println();
 				}
 			}
-			this.hanteiA();
 
 			System.out.println();
 			if ( this.getHandTotal() < 21 ) {

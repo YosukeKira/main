@@ -1,6 +1,6 @@
-package list;
+package demo;
 
-public abstract class People {
+public class People {
 	//フィールド
     private int count;
     private String[] hand;

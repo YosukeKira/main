@@ -1,4 +1,4 @@
-package list;
+package demo;
 
 public class Stack {
 	//山札の配列
