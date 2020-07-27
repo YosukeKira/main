@@ -1,0 +1,431 @@
+【Part 6】データベースをより使いやすく
+
+01．ビューの作成/変更
+
+※ ビュー：あらかじめ定義したSQL文(SELECT文など)を保存し、テーブルと同じように扱うことができる
+
+＜メリット＞ ・毎回SQL文(SELECT文)を作らなくてもよい
+			 ・参照元が変更されても新しいテーブルを作らなくてもよい
+
+構文：CREATE/ARTER VIEW ビュー名(
+	  	フィールド名,  // フィールド名は省略可能
+	  	・・・
+	  )
+	  AS SELECT命令;
+
+(テーブルの作成/変更と同じ手順)
+※ フィールドのデータ型は参照元テーブルのフィールドと同じになるので、指定する必要なし
+※ フィールド名の省略も可能
+
+(削除) DROP VIEW ビュー名;
+※ ビューを削除しても、参照元の実テーブルは削除されない
+
+
+例）[作成]
+	CREATE VIEW v_post_list(
+		post_code, post_name, emp_code, emp_name
+	) AS
+	SELECT post.code, post.name, emp.code, emp.name
+	FROM tbl_post AS post, tbl_employee AS emp
+	WHERE post.code = emp.post_code;
+
+(確認) SELECT * FROM v_post_list;
+	   SHOW TABLES FROM nyuumon;
+
+(ビューかテーブルかの確認方法) SHOW CREATE TABLE v_post_list \G
+
+
+例）[変更]ビューのフィールドの順番を変更
+	ALTER VIEW v_post_list(
+		emp_code, emp_name, post_code, post_name
+	) AS
+	SELECT emp.code, emp.name, post.code, post.name
+	FROM tbl_post AS post, tbl_employee AS emp
+	WHERE post.code = emp.post_code;
+	
+(確認) SELECT * FROM v_post_list;
+
+(削除) DROP VIEW v_post_list;
+(確認) SHOW TABLES FROM nyuumon;
+
+
+例）[(参照元あるいは参照先の)更新]
+(作成) CREATE VIEW v_post_list(
+			post_code, post_name, emp_code, emp_name
+		) AS
+	   SELECT post.code, post.name, emp.code, emp.name
+	   FROM tbl_post AS post, tbl_employee AS emp
+	   WHERE post.code = emp.post_code;
+	   
+(確認) SELECT * FROM v_post_list;
+
+(更新①) UPDATE tbl_employee SET name = '山田はなこ'
+		 WHERE code = 103;
+
+(確認) SELECT * FROM tbl_employee;
+	   SELECT * FROM v_post_list;
+
+(更新②) UPDATE v_post_list SET emp_name = '山田花子'
+		 WHERE emp_code = 103;
+		 
+(確認) SELECT * FROM v_post_list;
+	   SELECT * FROM tbl_employee;
+
+
+
+02．トリガーの作成
+※トリガー：
+  対象テーブルに処理が行われた際に、その処理をきっかけにして
+  他のテーブルに指定処理を行わせる機能
+
+構文：CREATE TRIGGER トリガー名
+	  
+	  DELIMITER // (記号は//でなくてもよい)
+	  タイミング｛BEFORE または AFTER｝イベント｛INSERT または UPDATE または DELETE｝
+	  ON 対象テーブル FOR EACH ROW
+	  BEGIN
+	  	SQL命令
+	  END //
+	  DELIMITER ;
+	  
+(削除) DROP TRIGGER トリガー名;
+(確認) SHOW TRIGGERS \G
+
+
+※ 区切り文字の要変更：
+   DELIMITER //			← 実行前 (; → // に変更)
+   DELIMITER ;			← 実行後 (// → ; に戻す)
+
+例）
+(準備) SELECT * FROM tbl_employee;
+	   INSERT INTO tbl_employee
+	   VALUES (106, '斉藤高志', '1982-03-03', 20, NULL, 102);
+	   
+(確認) SELECT * FROM tbl_employee;
+	   SELECT * FROM tbl_emp_log;
+
+
+(変更) DELIMITER //
+[作成] CREATE TRIGGER trg_employee BEFORE DELETE
+	   ON tbl_employee FOR EACH ROW
+	   BEGIN
+	   	INSERT INTO tbl_emp_log
+	   	SELECT * FROM tbl_employee WHERE code = OLD.code;	-- OLD. 処理前 NEW. 処理後
+	   	END //
+(戻す) DELIMITER ;
+
+(確認) SELECT * FROM tbl_employee;		// 現状確認
+	   SELECT * FROM tbl_emp_log;		// 現状確認
+
+[実行] DELETE FROM tbl_employee WHERE code = 106;
+
+(確認) SELECT * FROM tbl_employee;		// データ削除確認
+	   SELECT * FROM tbl_emp_log;		// 自動保存の確認
+
+
+
+03．ストアドプロシージャの作成
+
+※ ストアドプロシージャ：(DBに登録される 例、nyuumon以外のデータベースでは使えない)
+   少ない回数でデータ操作を行えるように、複雑な処理を事前に登録できる機能
+
+構文： CREATE PROCEDURE プロシージャ名(
+	   引数のタイプ{IN または OUT} 引数 引数のデータ型,
+	   ・・・
+	   )
+	   BEGIN
+	   	処理
+	   END //
+	   
+(呼出) CALL プロシージャ名;
+(削除) DROP PROCEDURE プロシージャ名;
+(確認) SHOW CREATE PROCEDURE プロシージャ名;
+
+※ 区切り文字の変更を忘れずに！
+
+
+例）
+(変更) DELIMITER //
+[作成] CREATE PROCEDURE prc_calc_tax(
+	   IN price INT, OUT tax INT)
+	   BEGIN
+	   	SELECT(price * 0.05) INTO tax;
+	   END //
+(変更) DELIMITER ;
+		↓(活用)
+[呼出] CALL prc_calc_tax(100, @tax);
+		※ 先頭に"@"を付け足すことでMySQL内で変数として扱われる
+		※ CREATE文で作成したほかのデータベースでは直接呼び出せない！
+(確認) SELECT @tax;
+		※ MySQLを切断しない限り、実行結果は他のデーターベースでも呼び出せる！
+
+
+例）①、データベースnyuumon → test に切り替え
+		USE test;
+	②、プロシージャの呼び出し
+		CALL prc_calc_tax(100, @tax);
+		→ エラーになる
+	
+	※間接的には呼び出し可能
+		CALL nyuumon.prc_calc_tax(100, @tax);
+	③、変数の値の確認
+		SELECT @tax;
+	④、データベースtest → nyuumon に切り替え
+	
+(確認) SHOW CREATE PROCEDURE prc_calc_tax \G
+[一覧] SHOW PROCEDURE STATUS \G
+
+(削除) DROP PROCEDURE prc_calc_tax;
+
+
+
+
+04．ストアドファンクションの作成
+※ ストアドファンクション：
+   上記プロシージャとの違いは戻り値があるか否か、の違い！
+   
+構文：CREATE FUNCTION ファンクション名(
+	  引数 引数のデータ型,
+	  )
+	  RETURNS
+	  戻り値のデータ型[DETERMINISTIC または NOT DETERMINISTIC]
+	  BEGIN
+	  	処理
+	  END //
+
+※ 入力値が同じであれば常に戻り値が同じになる場合は末尾に「DETERMINISTIC」を、
+   異なる可能性がある場合は「NOT DETERMINISTIC」を末尾に記載する。
+   例、3を渡したら10が必ず返ってくる → DETERMINISTIC
+   	   3を渡したら時々6、時々10 → NOT NOT DETERMINISTIC
+
+→ 定義し忘れた場合、環境(MySQL)のインストール済みの
+   アプリ構成によってはエラーが発生する場合がある
+
+→ XAMPP内のMySQL(MariaDB)を使用する場合は、要記述！
+   (※ 最近のMariaDBでは、解消されている。)
+
+
+(呼出) SELECT ファンクション名(引数);
+(削除) DROP FUNCTION ファンクション名;
+(確認) SHOW CREATE FUNCTION ファンクション名;
+
+
+例）DELIMITER //
+	
+	CREATE FUNCTION fnc_calc_tax(
+	price INT
+	) RETURNS INT -- [DETERMINISTIC]
+	BEGIN
+		DECLARE tax INT;
+		SELECT (price * 0.05) INTO tax;
+		RETURN tax;
+	END //
+	
+	DELIMITER ;
+	
+※ DECLARE文はすべて BEGINの直後に書く必要がある。
+   ルーチンの途中に書くことはできない。
+
+
+(呼出) SELECT fnc_calc_tax(100);
+	   ※ CREATE文で作成したほかのデータベースでは直接呼び出せない！
+
+	   SELECT @tax := fnc_calc_tax(100);
+	   				↑:= (代入演算子)
+	   ※ ユーザー定義変数に値を格納すれば、実行結果は他のデータベースでも呼び出せる
+	   
+(使用) SELECT emp_code, salary, fnc_calc_tax(salary) AS tax
+	   FROM tbl_salary;
+	   
+(確認)[内容] SHOW CREATE FUNCTION fnc_calc_tax \G
+	  [一覧] SHOW FUNCTION STATUS \G
+	  
+(削除) DROP FUNCTION fnc_calc_tax;
+
+
+
+
+
+
+
+SQL 応用編【Part 7】実践的なサンプル
+
+01． データをグループ化して抽出する
+【GROUP BY】：特定のフィールドでまとめる
+
+例）SELECT dpt.code AS dpt_code,
+		   dpt.name AS dpt_name,
+		   COUNT(*) AS emp_cut
+	FROM tbl_employee AS emp, tbl_department AS dpt
+	WHERE emp.dpt_code = dpt.code
+	// グループ化に使うフィールドを指定
+	GROUP BY dpt.code;
+
+【HAVING】：グループ化した結果を抽出条件にする
+
+※ SELECT文で指定可能な句の実行順序
+1． FROM句
+2． WHERE句
+3． 【GUROUP BY句】 ← この句より評価が後の句に条件を記述する必要がある
+4． HAVING句
+5．SELECT句
+6．ORDER BY句
+
+
+例） SELECT dpt.code AS dpt_code,
+			dpt.name AS dpt_name,
+			COUNT(*) AS emp_cnt
+	 FROM tbl_employee AS emp, tbl_department AS dpt
+	 WHERE emp.dpt_code = dpt.code
+	 GROUP BY dpt.code
+	 HAVING emp_cnt >= 2;
+
+
+
+02． サブクエリー(副問い合わせ)←SQLの抽出条件に使用されたSELECT命令
+
+例）総務部に所属している社員を抽出する(サブクエリー未使用)
+
+(社員テーブルの情報を調べる)
+	SELECT * FROM tbl_employee;
+	→部署名ではなく、部署コードで管理されている
+	
+(部署コードを調べる)
+	SELECT code FROM tbl_department
+	WHERE name = '総務部';  // 戻り値 code → 10
+	
+(該当する部署コードの社員を調べる)
+	SELECT * FROM tbl_employee
+	WHERE dpt_code = 10;  // 上記で調べた結果を使用
+	// 10を得られた(部署コードを調べるSQL)をそのまま10の部分に当て込む
+
+↓サブクエリー（p.256）
+	SELECT * FROM tbl_employee 
+	WHERE dpt_code = ( SELECT code FROM tbl_department
+					   WHERE name = '総務部'
+					 );
+					 
+サブクエリーの使用の注意
+1．()で囲む
+2．抽出するフィールドは1つ
+3．SELECT命令によって値が複数帰ってくる場合は、「=」演算子ではなくIN演算子を使用する
+
+
+
+
+03．いずれかの値と比較する
+
+例）総務部以外に所属している社員を抽出する
+
+	SELECT * FROM tbl_employee WHERE dpt_code 
+		<> (SELECT code FROM tbl_department WHERE name = '総務部');
+		
+
+(IN演算子)p.256  code = 20
+	SELECT * FROM tbl_employee WHERE dpt_code 
+		IN ( SELECT code FROM tbl_department WHERE name <> '総務部');
+
+(ANY演算子)
+	SELECT * FROM tbl_employee WHERE dpt_code =
+		ANY ( SELECT code FROM tbl_department WHERE name <> '総務部');
+
+
+例) 総務部以外に所属している社員以外の社員を抽出する(INとANYの違い)
+→  総務部に所属している社員を抽出する
+
+(IN演算子の否定形)集合の否定 //  =(20 または 30)以外 → 10
+	SELECT * FROM tbl_employee WHERE dpt_code 
+		NOT IN ( SELECT code FROM tbl_department WHERE name <> '総務部');
+
+
+(ANY演算子否定形)否定の集合  
+//  =20以外 または =30以外 → 10,30 または 10,20 → すべてのレコードが抽出される
+	SELECT * FROM tbl_employee WHERE dpt_code <>
+		ANY ( SELECT code FROM tbl_department WHERE name <> '総務部');
+
+
+(ANY演算子の活用例)：比較演算子との組み合わせ
+//  =20未満 または = 30未満 → 10 または 10,20
+例）SELECT * FROM tbl_employee WHERE dpt_code
+		< ANY ( SELECT code FROM tbl_department WHERE name <> '総務部');
+
+
+
+05．異なるテーブルの抽出結果を結合する
+
+例）生年月日1975年1月1日以降の社員とパートタイマを同時に抽出
+
+(UNION演算子)
+	SELECT code, name, birthday FROM tbl_employee
+	WHERE birthday >= '1975-01-01'
+	UNION
+	SELECT code, name, birthday FROM tbl_parttimer
+	WHERE birthday >= '1975-01-01';
+
+(UNION ALL演算子)
+	SELECT code, name, birthday FROM tbl_employee
+	WHERE birthday >= '1975-01-01'
+	UNION ALL
+	SELECT code, name, birthday FROM tbl_parttimer
+	WHERE birthday >= '1975-01-01';
+
+※ UNIONの注意点
+ ・同じフィールド数をもつテーブルであること
+ ・それぞれのフィールドのデータ型が同じであること
+ ・UNIONで省略されるレコードは抽出するすべての値が重複している場合に行われる
+
+
+
+
+06．等 結 合：参照先テーブルにデータがないと参照元テーブルから抽出されない(内部結合)
+	外部結合：参照先テーブルにデータがなくても参照元テーブルと結合できる
+	交差結合：参照元テーブル、レコードに参照先テーブルの全レコードを結合する
+
+
+例）等結合
+	SELECT emp.code AS emp_code, emp.name AS emp_name,
+		   post.code AS post_code, post.name AS post_name
+	FROM tbl_employee AS emp, tbl_post AS post
+	WHERE emp.post_code = post.code;
+
+例）左外部結合
+	SELECT emp.code AS emp_code, emp.name AS emp_name,
+		   post.code AS post_code, post.name AS post_name
+	FROM tbl_employee AS emp
+		 LEFT OUTER JOIN tbl_post AS post
+	ON emp.post_code = post.code;
+
+
+例）右外部結合(基本使わない)
+	SELECT emp.code AS emp_code, emp.name AS emp_name,
+		   post.code AS post_code, post.name AS post_name
+	FROM tbl_employee AS emp
+		 RIGHT OUTER JOIN tbl_post AS post
+	ON emp.post_code = post.code;
+
+例）WHERE句を使わない等結合(FROM句に記述する等結合)
+	SELECT emp.code AS emp_code, emp.name AS emp_name,
+		   post.code AS post_code, post.name AS post_name
+	FROM tbl_employee AS emp
+		 INNER JOIN tbl_post AS post
+	ON emp.post_code = post.code;
+
+
+例）交差結合
+	SELECT emp.code AS emp_code, emp.name AS emp_name,
+		   post.code AS post_code, post.name AS post_name
+	FROM tbl_employee AS emp
+		 CROSS JOIN tbl_post AS post;
+		 -- ON 結合条件不要
+		 
+
+※ 互いの結合条件が未指定の場合、自動的に交差結合になる
+	SELECT emp.code AS emp_code, emp.name AS emp_name,
+		   post.code AS post_code, post.name AS post_name
+	FROM tbl_employee AS emp, tbl_post AS post;
+	-- WHERE emp.post_code = post.code;  //WHERE句を書き忘れると交差結合になる
+
+
+
+
+

@@ -1,0 +1,100 @@
+/*
+************************************************************
+ これならわかるSQL　入門の入門
+
+ 作成者:五十嵐貴之
+ 作成日:2007.09.19
+************************************************************
+*/
+
+create database nyuumon;
+
+use nyuumon;
+
+create table tbl_department (
+    code        INTEGER     NOT NULL PRIMARY KEY,
+    name        VARCHAR(40)
+);
+
+create table tbl_post (
+    code        INTEGER     NOT NULL PRIMARY KEY,
+    name        VARCHAR(40)
+);
+
+create table tbl_employee (
+    code        INTEGER     NOT NULL PRIMARY KEY,
+    name        VARCHAR(40),
+    birthday    DATE,
+    dpt_code    INTEGER     NOT NULL,
+    post_code   INTEGER,
+    manager     INTEGER,
+    FOREIGN KEY(dpt_code) REFERENCES tbl_department(code),
+    FOREIGN KEY(post_code) REFERENCES tbl_post(code)
+);
+
+create table tbl_emp_log (
+    code        INTEGER,
+    name        VARCHAR(40),
+    birthday    DATE,
+    dpt_code    INTEGER,
+    post_code   INTEGER,
+    manager     INTEGER
+);
+
+create table tbl_dpt_emp (
+    dpt_code    INTEGER,
+    dpt_name    VARCHAR(40),
+    emp_code    INTEGER,
+    emp_name    VARCHAR(40)
+);
+
+create table tbl_salary (
+    emp_code    INTEGER     NOT NULL PRIMARY KEY,
+    salary      NUMERIC(14,0)
+);
+
+create table tbl_parttimer (
+    code        INTEGER     NOT NULL PRIMARY KEY,
+    name        VARCHAR(40),
+    birthday    DATE,
+    dpt_code    INTEGER     NOT NULL,
+    manager     INTEGER,
+    FOREIGN KEY(dpt_code) REFERENCES tbl_department(code)
+);
+
+create table tbl_period (
+    period      INTEGER,
+    start_date  DATE,
+    end_date    DATE
+);
+
+insert into tbl_department values (10,'総務部');
+insert into tbl_department values (20,'営業部');
+insert into tbl_department values (30,'開発部');
+
+insert into tbl_post values (1,'社長');
+insert into tbl_post values (2,'部長');
+insert into tbl_post values (3,'次長');
+insert into tbl_post values (4,'課長');
+insert into tbl_post values (5,'係長');
+
+insert into tbl_employee values (101,'鈴木一郎','1972-02-01',10,3,NULL);
+insert into tbl_employee values (102,'佐藤栄作','1974-09-09',20,4,101);
+insert into tbl_employee values (103,'山田花子','1976-05-21',10,4,101);
+insert into tbl_employee values (104,'田中達也','1978-12-04',30,NULL,102);
+insert into tbl_employee values (105,'高橋和子','1980-07-14',30,NULL,103);
+
+insert into tbl_salary values (101,325000);
+insert into tbl_salary values (102,482000);
+insert into tbl_salary values (103,236000);
+insert into tbl_salary values (104,184000);
+insert into tbl_salary values (105,145000);
+
+insert into tbl_parttimer values (103,'山田花子','1976-05-21',10,101);
+insert into tbl_parttimer values (106,'木村俊一','1977-08-13',30,103);
+insert into tbl_parttimer values (107,'森千里','1979-02-03',30,103);
+
+insert into tbl_period values (1,'2003-04-01','2004-03-31');
+insert into tbl_period values (2,'2004-04-01','2005-03-31');
+insert into tbl_period values (4,'2006-04-01','2007-03-31');
+insert into tbl_period values (5,'2007-04-01','2008-03-31');

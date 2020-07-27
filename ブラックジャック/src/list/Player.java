@@ -2,11 +2,25 @@ package list;
 
 public class Player extends People {
 
+	public void sentaku( Stack yama, int a) {
+		switch( a ){
+		case 1 :
+			this.hit( yama );
+			break;
+		case 0:
+			break;
+
+		default:
+			System.out.println("指定の数字以外が入力されました");
+		}
+	}
+
 	//ヒットをした場合の処理
-	public void sentaku( Stack yama, int a ) {
+	public void hit( Stack yama) {
 		int aceCount = 0;
+		int bunki = 1;
 		//エースを1としてカウントした場合
-		while( a == 1 && getHandTotal() < 21 ) {
+		while( bunki == 1 && getHandTotal() < 21 ) {
 			this.draw( yama );
 			for ( int i = 0; i < this.getCount(); i++ ){
 			    System.out.print(this.getHand(i) + " ");
@@ -35,8 +49,9 @@ public class Player extends People {
 
 			System.out.println();
 			if ( this.getHandTotal() < 21 ) {
-				System.out.print("0:STAND 1:HIT を入力>");
-				a = new java.util.Scanner(System.in).nextInt();
+//				System.out.print("0:STAND 1:HIT を入力>");
+//				bunki = new java.util.Scanner(System.in).nextInt();
+				bunki = Nyuryoku.pNyuryoku();
 			}
 		}
 	}

@@ -1,7 +1,9 @@
-﻿public class Nyuryoku {
+package list;
+
+public class Nyuryoku {
 
 	public static int pNyuryoku() {
-	    System.out.println("数字を入力してください");
+	    System.out.println("0:STAND 1:HIT を入力>");
 		String pSelect = new java.util.Scanner(System.in).nextLine();
 		String hSelect = null;
 		int select = 10;
@@ -9,24 +11,28 @@
 		if ( fullOut ){
 		    hSelect = numHenkan( pSelect );
 		    select = Integer.parseInt( hSelect );
-		    System.out.println("プレイヤーの入力値は" + select + "です");
+		    if ( !( select == 0 || select == 1 ) ) {
+		    	System.out.println("指定の数字以外が入力されました");
+				pNyuryoku();
+		    }
+//		    System.out.println("プレイヤーの入力値は" + select + "です");
 		} else{
 		    System.out.println("数字以外が入力されました");
 			pNyuryoku();
 		}
 		return select;
 	}
-	
-	
+
+
 	public static boolean pFullOut( String pSelect ){
 	    for(int i = 0; i < pSelect.length(); i++) {
-        
+
             //i文字めの文字についてCharacter.isDigitメソッドで判定する
             if( Character.isDigit( pSelect.charAt(i) ) ) {
-        
+
               //数字の場合は次の文字の判定へ
               continue;
-        
+
             }else {
               //数字でない文字がひとつでも含まれていたらfalseを返す
               return false;
@@ -34,7 +40,7 @@
          }
          return true;
 	}
-	
+
 	public static String numHenkan(String str) {
 		String result = null;
 		if(str != null) {
@@ -49,5 +55,5 @@
 		}
 	    return result;
 	}
-	
+
 }

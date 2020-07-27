@@ -1,0 +1,374 @@
+＞ SQL 基本編【Prat4】 基本的なデータ操作
+
+◎ DML(Data Monipulation Language) ：データ操作言語
+→ 検索・挿入・更新・削除などの操作を行うための言語
+
+<<習得すべきコマンド>>
+→ １．SELECT(検索)
+→ ２．INSERT(挿入)
+→ ３．UPDATE(更新)
+→ ４．DELETE(削除)
+
+
+１．「SELECT」編
+
+構文：SELECT フィールド名 AS 代替名 FROM テーブル名 WHERE 条件文;
+
+01. 全フィールドの取得
+
+例）SELECT * FROM tbl_employee;
+
+
+
+02．フィールドの絞り込み
+
+例）SELECT name, birthday FROM tbl_employee;
+	カンマで区切って複数のフィールドを指定することも可能
+	記述した順に抽出される
+
+
+
+03. レコードの絞り込み
+
+SELECT * FROM tbl_employee WHERE name = '検索内容';
+
+例）WHERE name = '鈴木一郎';  		←〇
+	WHERE name =  鈴木一郎 ;  		←×
+	WHERE dpt_code =  10 ;			←〇
+	WHERE dpt_code = '10';			←〇
+	WHERE birthday = '2020-7-18';	←〇
+	WHERE birthday =  2020-7-18 ;	←×
+※基本的なデータ型(文字列型、数値型、日付型)すべてにおいて''で囲っても問題ない。
+
+
+
+04．複数の条件を指定
+
+SELECT * FROM tbl_employee WHERE 検索内容 AND 検索内容
+SELECT * FROM tbl_employee WHERE 検索内容 OR 検索内容
+
+例）SELECT * FROM tbl_employee WHERE (dpt_code = 10) AND (post_code = 4);
+	SELECT * FROM tbl_employee WHERE (dpt_code = 10) OR (post_code = 4);
+※()はなくても動作に支障はない
+
+
+
+05．不等号で条件を指定
+
+例）SELECT * FROM tbl_employee WHERE birthday <= '1975-01-01';
+
+
+
+06．等しくないデータを抽出
+
+例）SELECT * FROM tbl_employee WHERE dpt_code <> 10;
+	SELECT * FROM tbl_employee WHERE dpt_code != 10;
+※上記は同じ意味
+
+
+
+07．列の名前に別名を指定
+
+例）SELECT code AS 社員コード, name AS 社員名, birthday AS 生年月日 FROM tbl_employee;
+
+※ MySQLを含め、いくつかのデータベースでは、ASの省略が可能！
+例）SELECT code 社員コード,name 社員名,birthday 生年月日 FROM tbl_employee;
+
+
+
+08．FROM句のないSELECT命令
+
+例） SELECT UPPER('abc');
+	※ MySQLを含め、いくつかのデータベースで利用可能！
+	※ 用途：関数の使用に確認などに利用！
+	   SELECT VERSION();
+
+
+
+09．NULLの取り扱い ： ＝ や != <> 演算子は使えない
+
+例）SELECT * FROM tbl_employee WHERE post_code IS NULL;
+	post_codeがNULLの項目を検索
+
+	SELECT * FROM tbl_employee WHERE post_code IS NOT NULL;
+	post_codeがNULLでない項目を検索
+
+
+
+10．演算子（算術、比較、論理演算子）
+
+＜算術＞JavaSEで登場しなかった演算子：DIV
+例） SELECT 10 / 3; , SELECT 10 DIV 3; , SELECT 10 % 3;
+※ DIVの取り扱いに注意
+×）SELECT 10DIV3; , SELECT 10DIV 3; , SELECT 10 DIV3; 
+〇）SELECT 10 DIV 3;
+
+
+＜比較＞JavaSEで登場しなかった演算子：<=> 、<>
+例）SELECT * FROM tbl_employee WHERE post_code IS NULL;
+	SELECT * FROM tbl_employee WHERE post_code <=> NULL;
+※ <=> ：NULL対応の"等しい"
+
+※ <=>：MySQL、MariaDB専用の演算子
+   Oracle、SQL、Server、PostgreSQLには存在しない
+
+
+＜論理＞JavaSEで登場した演算子
+例） SELECT 3 > 2 XOR 4 = 4;
+※ 戻り値が 1：true、 0：FALSE
+※ a XOR b は数学的に (a AND (NOT b)) OR ((NOT a) AND b)と等価である
+→ SELECT (3 > 2 AND (NOT 4 = 4)) OR ((NOT 3 > 2) AND 4 = 4);
+
+「演算子の優先順位」 p.130 参照（MySQL、MariaDBの場合）
+→ 算術				＞ 比較 ＞ 論理
+  （乗除  ＞ 加減） 			   (論理積 ＞ 排他的論理和 ＞論理和)
+
+例）SELECT * FROM tbl_employee WHERE dpt_code = 10 OR dpt_code = 20 AND post_code = 3;
+	SELECT * FROM tbl_employee WHERE (dpt_code = 10 OR dpt_code = 20) AND post_code = 3;
+
+
+
+11．値の範囲指定：BETWEEN 範囲指定開始(含む) AND 範囲指定終了(含む)
+
+例）SELECT * FROM tbl_employee WHERE birthday >= '1970-01-01' AND birthday <= '1979-12-31';
+	SELECT * FROM tbl_employee WHERE birthday BETWEEN '1970-01-01' AND '1979-12-31';
+
+※ JavaSEの参考条件演算子(？：)と同様、 BETWEEN ANDでセットの演算子。
+→ BETWEEN A && Bは、エラーになる
+
+例）SELECT * FROM tbl_employee WHERE birthday BETWEEN '1970-01-01' && '1979-12-31';
+→  この例文はエラーになる
+
+
+
+12．データの並び替え： ORDER BY フィールド名 [ASC](昇順)、DESC(降順)
+
+A）データが漢字の場合は最初の漢字の文字コードで判定される
+B）複数の並び替え条件は、,(カンマ)で区切る
+C）NULLの取り扱いはデータベースによって異なる ※MySQLでは最小値として扱われる
+D) フィールド名は左端から順番に割り当てられている数字で代替可能
+
+例）[数値] SELECT * FROM tbl_employee ORDER BY code ASC;
+	[文字] SELECT * FROM tbl_employee ORDER BY name ASC;
+
+
+
+※ 漢字の場合は文字コードで比較される UTF-8[上段]/Shift-JIS[下段]の場合
+
+   佐(籐)		山（田）		田（中）		鈴（木）		高（橋）
+   0xE4BD90		0xE5B1B1		0xE794B0		0xE988B4		0xE9AB98
+   0x8DB2		0x8E52			0x9363			0x97E9			0x8D82
+  
+例）[複数指定]SELECT * FROM tbl_employee ORDER BY dpt_code ASC, code DESC;
+	→複数指定の場合はカンマで区切る
+	[NULLを含む]SELECT * FROM tbl_employee ORDER BY post_code ASC;
+	[列番号]SELECT * FROM tbl_employee ORDER BY 1 ASC;
+
+
+
+13．あいまい検索：LIKE演算子'任意の文字列と％の組み合わせ'
+
+例）[前方一致] SELECT * FROM tbl_employee WHERE name LIKE '田中%';
+	[後方一致] SELECT * FROM tbl_employee WHERE name LIKE '%子';
+	[部分一致] SELECT * FROM tbl_employee WHERE name LIKE '山%子';
+	[部分一致] SELECT * FROM tbl_employee WHERE name LIKE '%和%';
+	→※ 使用例：MySQL 文字コードの確認）SHOW VARIABLES LIKE '%char%';
+
+
+
+14．重複したデータを省いて取得：DISTINCT(フィールド名)
+
+例）SELECT DISTINCT(dpt_code) FROM tbl_employee;
+	※重複しているデータも含めて表示したい場合は、ALLキーワードを明記するか、省略すれば良い
+	※通常、()は省略する
+	
+	SELECT DISTINCT(post_code) FROM tbl_employee;
+	※NULLは無視されない
+	↓
+	（NULLを無視する例）
+	SELECT DISTINCT(post_code) FROM tbl_employee WHERE post_code IS NOT NULL;
+
+
+
+15．複雑な抽出条件の簡略化：IN演算子の活用
+
+構文：WHERE フィールド名 IN （条件値1,条件値2, ・・・）
+
+例）[通常] SELECT * FROM tbl_employee WHERE dpt_code = 20 OR dpt_code = 30;
+	[ IN ] SELECT * FROM tbl_employee WHERE dpt_code IN (20,30);
+	
+	[ NOT] SELECT * FROM tbl_employee WHERE dpt_code NOT IN (20,30);
+	※指定した値以外の抽出は、否定すればよい、ただし！（記号）との組み合わせは不可
+	
+
+※ IN() ：ある値が値セット内に含まれているかどうかを確認する演算子
+
+   値セット内のデータは同じデータ型である必要がある。
+   データ型を混同すると、整合性のない結果になる可能性がある。
+   →NULL：データが存在しないことを表す値  値セットに指定しても無視される
+   
+例）SELECT * FROM tbl_employee WHERE manager IN (NULL,101);
+	→この場合NULLは無視される
+	
+	(NULLを含めたい場合)
+	SELECT * FROM tbl_employee WHERE manager <=> NULL OR manager <=> 101;
+	
+	上記2つの組み合わせも可能
+	SELECT * FROM tbl_employee WHERE manager IN (101,102) OR manager <=> NULL;
+
+
+
+16．抽出される値を切り替える：CASE演算子
+a． 特定の値と同じ場合の切り替え(特別な場合)
+
+構文：CASE フィールド名 
+		WHEN フィールドの値 THEN 返す値
+			・・・
+		ELSE 該当しない場合に返す値
+	  END
+
+例）SELECT code AS 社員コード, name AS 社員名,
+		CASE dpt_code
+			WHEN 10 THEN 'YES'
+			ELSE 'NO'
+		END AS 総務部
+		FROM tbl_employee;
+
+
+b.  「=」でない場合の切り替え(一般的な場合)
+
+構文： CASE 	//フィールド名は記載しない
+		WHEN 条件式 THEN 返す値
+			・・・
+		ELSE 該当しない場合に返す値
+	   END
+	   
+例）SELECT code AS 社員コード, name AS 社員名,
+		CASE 
+			WHEN birthday < '1975-01-01' THEN 'ベテラン'
+			ELSE '新人'
+		END AS 技量 
+	FROM tbl_employee;
+
+「birthday < '1975-01-01'」は「birthday = '1975-01-01'」でも使用可能
+→よってaの構文もbの構文で表現できるためこちらが常用される
+
+
+例）1975年1月1日より前				  ：第1期
+	1975年1月1日以降1979年12月31日以前：第2期
+	1980年1月1日以降				  ：第3期
+	
+	SELECT code AS 社員コード, name AS 社員名,
+		CASE
+			WHEN birthday < '1975-01-01' THEN '第1期'
+			WHEN birthday BETWEEN '1975-01-01' AND '1979-12-31' THEN '第2期'
+			ELSE '第3期'
+		END AS 技量
+	FROM tbl_employee;
+
+
+
+17．複数のテーブルから同時にデータを取得：テーブルの等結合
+
+・複数のテーブルを結合する際、同じフィールド名が使用されている場合は 
+  テーブル名、フィールド名 というように.(ドット)を使用して指定する
+・等結合は、WHERE句で指定する
+
+例）SELECT tbl_department.code AS dpt_code
+		  ,tbl_department.name AS dpt_name
+		  ,tbl_employee.code AS emp_code
+		  ,tbl_employee.name AS emp_name
+	FROM tbl_employee, tbl_department 
+	WHERE tbl_employee.dpt_code = tbl_department.code 
+	ORDER BY tbl_department.code ASC, tbl_employee.code ASC;
+
+※ テーブル名が長い場合は、ASキーワードを指定して、短縮名に置き換えることも可能。
+
+例）SELECT dpt.code AS dpt_code, dpt.name AS dpt_name
+		  ,emp.code AS emp_code, emp.name AS emp_name
+	FROM tbl_employee AS emp, tbl_department AS dpt
+	WHERE emp.dpt_code = dpt.code
+	ORDER BY dpt.code ASC, emp.code ASC;
+
+
+
+
+
+
+
+
+２． 「INSERT」編
+
+21．テーブルにデータを追加
+
+構文：INSERT INTO テーブル名[(フィールド名)]
+	  VALUES(フィールドに対応するデータ);
+
+例）INSERT INTO tbl_employee (code, name, birthday, dpt_code, post_code, manager)
+	VALUES (106, '斉藤高志', '1982-03-03', 20, NULL, 102);
+
+※ 全フィールドにデータを追加する場合、フィールド名は省略可能
+例）INSERT INTO tbl_employee
+	VALUES (106, '斉藤高志', '1982-03-03', 20, NULL, 102);
+
+
+
+22．大量のデータを一気に追加(別視点：抽出結果をテーブルに書き出す)
+
+構文：INSERT INTO 既存のテーブル名[（フィールド名）] SELECT命令
+
+※[前提]データを格納するテーブルを用意
+  ほかのテーブルを利用することができれば、効率的にデータを追加することができる
+※全フィールドを使用する場合はフィールド名は省略可能
+
+例）[事前確認]SELECT * FROM tbl_dpt_emp; //Empty set
+			  SHOW FIELDS FROM tbl_dpt_emp;
+
+[追加作業]
+	INSERT INTO tbl_dpt_emp
+		SELECT dpt.code, dpt.name, emp.code, emp.name
+		FROM tbl_employee AS emp, tbl_department AS dpt
+		WHERE emp.dpt_code = dpt.code;
+		
+(事後確認)SELECT * FROM tbl_dpt_emp;
+
+
+
+
+３．「UPDATE」編
+
+構文：UPDATE 既存のテーブル名 SET 対象フィールド = 更新データ WHERE 条件文;
+
+※ 対象フィールドが複数ある場合は、,(カンマ)で区切る
+※ WHEREでレコードを指定しない場合、全レコードが更新対象となるので注意
+
+例）[事前確認] SELECT * FROM tbl_employee WHERE code = 106;
+	[更新作業] UPDATE tbl_employee SET dpt_code = 30, birthday = '1983-03-03' WHERE code = 106;
+	[事後確認] SELECT * FROM tbl_employee;
+
+
+
+
+４．「DELETE」編
+
+構文：DELETE FROM 対象のテーブル名 WHERE 条件文;
+
+※ WHEREでレコードを指定しない場合、全レコードが削除対象となるので、注意
+
+例）
+[事前確認] SELECT * FROM tbl_employee WHERE code = 106;
+[削除作業] DELETE FROM tbl_employee WHERE code = 106;
+[事後確認] SELECT * FROM tbl_employee;
+
+
+
+
+
+
+
+
+
+
+
+
+

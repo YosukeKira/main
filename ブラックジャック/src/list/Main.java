@@ -8,10 +8,6 @@ public class Main {
 		Player p = new Player();//プレイヤー登場
 
 
-		//ディーラーが山札をシャッフル
-//		d.shuffle( yama );
-
-
 		//プレイヤーが2枚カードを引く
 		p.draw( yama );
 		p.draw( yama );
@@ -48,8 +44,9 @@ public class Main {
 		}
 
         //プレイヤーの選択
-		System.out.print("0:STAND 1:HIT を入力>");
-		int a = new java.util.Scanner(System.in).nextInt();
+//		System.out.print("0:STAND 1:HIT を入力>");
+//		int a = new java.util.Scanner(System.in).nextInt();
+		int a = Nyuryoku.pNyuryoku();
 		p.sentaku( yama, a );
 		System.out.println();
 
