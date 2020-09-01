@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja" dir="ltr">
 <head>
 <meta charset="UTF-8" />
@@ -6,63 +6,106 @@
 <title>マスターマインド</title>
 </head>
 <body>
+<h1>MasterMindゲーム</h1>
 
-<table style="float:left; overflow: scroll;" border="1" width="200" height="500">
+<table style="float:left; margin-right:50px;" border="1" width="250" height="500">
 <caption style="text-align:left;">履歴</caption>
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>1回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>2回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>3回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>4回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>5回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>6回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>7回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>8回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>9回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 	
 	<tr>
-		<td>〇〇〇〇</td>
-		<td>Hit:〇<br />Blow:〇</td>
+		<td>10回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
 	</tr>
 </table>
 
-<p>フロートって使い方むずいよね</p>
-<p>ここの文字ってどこに配置されるん？？</p>
+<!-- 上段数字 -->
+<div>
+<label name="1st"><img src="number/0_number.png" id="first" class="number" height="150" width="150" style="margin-top:30px; margin-right:20px;" /></label>
+<label name="2nd"><img src="number/0_number.png" id="second" class="number" height="150" width="150" style="margin-top:30px; margin-right:20px;" /></label>
+<label name="3rd"><img src="number/0_number.png" id="third" class="number" height="150" width="150" style="margin-top:30px; margin-right:20px;" /></label>
+<label name="4th"><img src="number/0_number.png" id="fourth" class="number" height="150" width="150" style="margin-top:30px; margin-right:20px;" /></label>
 
+<form style="float:right">
+<input type="submit" action="※サーバーURL" method="post" onmouseover="※今の数値をhiddenに反映するメソッド" style="width:120px; height:50px; margin-top:70px; margin-right:350px;" value="OK" /><br />
+<button type="button" onclick="※全て0にするjavascriptメソッド" style="width:120px; height:50px; margin-top:10px;">reset</button>
+<input type="hidden" value=""/>
+</form>
+</div>
 
+<!-- 選択ボタン -->
+<div>
+<table width="724" style="padding-left:20px;">
+<tr>
+	<td><label name="1st"><img src="button/btn_1.gif" class="sentaku" width="100" /></label></td>
+	<td><label name="2nd"><img src="button/btn_1.gif" class="sentaku" width="100" /></label></td>
+	<td><label name="3rd"><img src="button/btn_1.gif" class="sentaku" width="100" /></label></td>
+	<td><label name="4th"><img src="button/btn_1.gif" class="sentaku" width="100" /></label></td>
+</tr>
+</table>
+</div>
+
+<!-- numberボタン  -->
+<div>
+<table width="700" style="margin-top:40px;">
+<tr>
+	<td><img src="number/1_number.png" width="100" height="100" /></td>
+	<td><img src="number/2_number.png" width="100" height="100" /></td>
+	<td><img src="number/3_number.png" width="100" height="100" /></td>
+	<td><img src="number/4_number.png" width="100" height="100" /></td>
+	<td><img src="number/5_number.png" width="100" height="100" /></td>
+</tr>
+
+<tr>
+	<td><img src="number/6_number.png" width="100" height="100" /></td>
+	<td><img src="number/7_number.png" width="100" height="100" /></td>
+	<td><img src="number/8_number.png" width="100" height="100" /></td>
+	<td><img src="number/9_number.png" width="100" height="100" /></td>
+	<td><img src="number/0_number.png" width="100" height="100" /></td>
+</tr>
+</table>
+</div>
 </body>
 </html>
