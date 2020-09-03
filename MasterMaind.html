@@ -72,6 +72,23 @@ function reSet(){
 
 <table style="float:left; margin-right:50px;" border="1" width="20%" height="500">
 <caption style="text-align:left;">履歴</caption>
+
+<!-- 2回目以降の表示 -->
+<%
+for (i = 0; i < 10; i++){
+	if( i <= challenge ){
+%>
+	<script>
+		document.write( <!-- <tr><td> i 回目：i回目の結果</td><td>Hit：i回目の結果<br />Blow：i回目の結果</td></tr>  --> );
+	</script>
+<%	} else { %>
+	<script>
+		document.write( <!-- <tr><td> i 回目：？？？？</td><td>Hit：？<br />Blow：？</td></tr>  --> );
+	</script>
+<%}%>
+
+
+
 	<tr>
 		<td>1回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
