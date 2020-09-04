@@ -1,34 +1,38 @@
-﻿<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% int challenge = 5; %>
+<!DOCTYPE html>
 <html lang="ja" dir="ltr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<title>マスターマインド</title>
+<title>�}�X�^�[�}�C���h</title>
 <link rel="stylesheet" href="cssFile.css">
 <script src="javaScriptFile"></script>
 <script>
 <!--
-//選択されている番号を示す変数
+
+//�I������Ă���ԍ��������ϐ�
 var count = 0;
 
-//numberボタンが押された時の処理
+//number�{�^���������ꂽ���̏���
 function numClick( num ){
 	document.images[count].src="number/number" + num + ".png";
 	count++;
-	
+
 	if (count >= 4){
 		count = 0;
 	}
 	selectBtn();
 }
 
-//数字下の選択ボタンが押された時の処理
+//�������̑I���{�^���������ꂽ���̏���
 function select( num ){
 	count = num;
 	selectBtn();
 }
 
-//数字下の選択ボタンの整合性を保つ処理
+//�������̑I���{�^���̐�������ۂ���
 function selectBtn(){
 	switch(count){
 		case 0:
@@ -58,7 +62,7 @@ function selectBtn(){
 	}
 }
 
-//リセットボタンが押された時の処理
+//���Z�b�g�{�^���������ꂽ���̏���
 function reSet(){
 	for (i = 0; i <= 3; i++){
 		document.images[i].src="number/number0.png";
@@ -70,92 +74,38 @@ function reSet(){
 </script>
 </head>
 <body onload="selectBtn()">
-<h1>MasterMindゲーム</h1>
+<h1>MasterMind�Q�[��</h1>
 
 <table style="float:left; margin-right:50px;" border="1" width="20%" height="500">
-<caption style="text-align:left;">履歴</caption>
+<caption style="text-align:left;">����</caption>
 
-<!-- 2回目以降の表示 -->
+<!-- 2��ڈȍ~�̕\�� -->
 <%
-for (i = 0; i < 10; i++){
-	if( i <= challenge ){
+for (int i = 0; i < 10; i++){
+	if( i < challenge ){
 %>
-	<script>
-		document.write( <!-- <tr><td> i 回目：i回目の結果</td><td>Hit：i回目の結果<br />Blow：i回目の結果</td></tr>  --> );
-	</script>
+<tr><td><%= i + 1 %>��ځF<%= 1111 %></td><td>Hit�F<%= 1 %><br />Blow�F<%= 1  %></td></tr>
+
 <%	} else { %>
-	<script>
-		document.write( <!-- <tr><td> i 回目：？？？？</td><td>Hit：？<br />Blow：？</td></tr>  --> );
-	</script>
-<%}%>
+<tr><td>�H��ځF�H�H�H�H</td><td>Hit�F�H<br />Blow�F�H</td></tr>
+<%  }	} %>
 
-
-
-	<tr>
-		<td>1回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>2回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>3回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>4回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>5回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>6回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>7回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>8回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>9回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
-	
-	<tr>
-		<td>10回目:？？？？</td>
-		<td>Hit:？<br />Blow:？</td>
-	</tr>
 </table>
 
-<!-- 上段数字 -->
+<!-- ��i���� -->
 <div>
 <label name="1st"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 <label name="2nd"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 <label name="3rd"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 <label name="4th"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 
-<form style="float:right">
-<button type="button" action="※サーバーURL" method="post" style="width:120px; height:50px; margin-top:70px; margin-right:200px;" value="OK">OK</button><br />
+<form action="/masterMind/Result" method="post" style="float:right">
+<input type="submit" style="width:120px; height:50px; margin-top:70px; margin-right:200px;" value="OK" /><br />
 <button type="button" onclick="reSet()" style="width:120px; height:50px; margin-top:10px;">reset</button>
 </form>
 </div>
 
-<!-- 選択ボタン -->
+<!-- �I���{�^�� -->
 <div>
 <table width="53.6%" style="padding-left:20px;">
 <tr>
@@ -167,7 +117,7 @@ for (i = 0; i < 10; i++){
 </table>
 </div>
 
-<!-- numberボタン  -->
+<!-- number�{�^��  -->
 <div>
 <table width="54%" style="margin-top:40px;">
 <tr>
