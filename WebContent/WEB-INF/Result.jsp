@@ -1,21 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% int challenge = 5; %>
+<%@page import="java.util.ArrayList,teamMasterMind.PlayerResult" %>
+<%
+ArrayList<PlayerResult> resultList = ( ArrayList<PlayerResult> ) session.getAttribute("resultList");
+//Arrayãƒªã‚¹ãƒˆã«å…¥ã£ã¦ã„ã‚‹è¦ç´ ã®æ•°ã‚’å–å¾—
+int challenge = resultList.size();
+%>
+
+
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<title>ƒ}ƒXƒ^[ƒ}ƒCƒ“ƒh</title>
+<title>ãƒã‚¹ã‚¿ãƒ¼ãƒã‚¤ãƒ³ãƒ‰</title>
 <link rel="stylesheet" href="cssFile.css">
 <script src="javaScriptFile"></script>
 <script>
 <!--
 
-//‘I‘ğ‚³‚ê‚Ä‚¢‚é”Ô†‚ğ¦‚·•Ï”
+//é¸æŠã•ã‚Œã¦ã„ã‚‹ç•ªå·ã‚’ç¤ºã™å¤‰æ•°
 var count = 0;
 
-//numberƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
+//numberãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
 function numClick( num ){
 	document.images[count].src="number/number" + num + ".png";
 	count++;
@@ -26,13 +33,13 @@ function numClick( num ){
 	selectBtn();
 }
 
-//”š‰º‚Ì‘I‘ğƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
+//æ•°å­—ä¸‹ã®é¸æŠãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
 function select( num ){
 	count = num;
 	selectBtn();
 }
 
-//”š‰º‚Ì‘I‘ğƒ{ƒ^ƒ“‚Ì®‡«‚ğ•Û‚Âˆ—
+//æ•°å­—ä¸‹ã®é¸æŠãƒœã‚¿ãƒ³ã®æ•´åˆæ€§ã‚’ä¿ã¤å‡¦ç†
 function selectBtn(){
 	switch(count){
 		case 0:
@@ -62,7 +69,7 @@ function selectBtn(){
 	}
 }
 
-//ƒŠƒZƒbƒgƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
+//ãƒªã‚»ãƒƒãƒˆãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
 function reSet(){
 	for (i = 0; i <= 3; i++){
 		document.images[i].src="number/number0.png";
@@ -74,25 +81,25 @@ function reSet(){
 </script>
 </head>
 <body onload="selectBtn()">
-<h1>MasterMindƒQ[ƒ€</h1>
+<h1>MasterMindã‚²ãƒ¼ãƒ </h1>
 
 <table style="float:left; margin-right:50px;" border="1" width="20%" height="500">
-<caption style="text-align:left;">—š—ğ</caption>
+<caption style="text-align:left;">å±¥æ­´</caption>
 
-<!-- 2‰ñ–ÚˆÈ~‚Ì•\¦ -->
+<!-- å±¥æ­´è¡¨ã®è¡¨ç¤º -->
 <%
 for (int i = 0; i < 10; i++){
 	if( i < challenge ){
 %>
-<tr><td><%= i + 1 %>‰ñ–ÚF<%= 1111 %></td><td>HitF<%= 1 %><br />BlowF<%= 1  %></td></tr>
+<tr><td><%= i + 1 %>å›ç›®ï¼š<%= resultList.get(i).getPlayerResult() %></td><td>Hitï¼š<%= resultList.get(i).getHit() %><br />Blowï¼š<%= resultList.get(i).getBlow()  %></td></tr>
 
 <%	} else { %>
-<tr><td>H‰ñ–ÚFHHHH</td><td>HitFH<br />BlowFH</td></tr>
+<tr><td>ï¼Ÿå›ç›®ï¼šï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td><td>Hitï¼šï¼Ÿ<br />Blowï¼šï¼Ÿ</td></tr>
 <%  }	} %>
 
 </table>
 
-<!-- ã’i”š -->
+<!-- ä¸Šæ®µæ•°å­— -->
 <div>
 <label name="1st"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 <label name="2nd"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
@@ -105,7 +112,7 @@ for (int i = 0; i < 10; i++){
 </form>
 </div>
 
-<!-- ‘I‘ğƒ{ƒ^ƒ“ -->
+<!-- é¸æŠãƒœã‚¿ãƒ³ -->
 <div>
 <table width="53.6%" style="padding-left:20px;">
 <tr>
@@ -117,7 +124,7 @@ for (int i = 0; i < 10; i++){
 </table>
 </div>
 
-<!-- numberƒ{ƒ^ƒ“  -->
+<!-- numberãƒœã‚¿ãƒ³  -->
 <div>
 <table width="54%" style="margin-top:40px;">
 <tr>

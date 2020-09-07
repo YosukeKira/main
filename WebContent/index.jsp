@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html lang="ja" dir="ltr">
 <head>
 <meta charset="UTF-8" />
@@ -15,7 +17,7 @@ var count = 0;
 function numClick( num ){
 	document.images[count].src="number/number" + num + ".png";
 	count++;
-	
+
 	if (count >= 4){
 		count = 0;
 	}
@@ -74,68 +76,51 @@ function reSet(){
 
 <table style="float:left; margin-right:50px;" border="1" width="20%" height="500">
 <caption style="text-align:left;">履歴</caption>
-
-<!-- 2回目以降の表示 -->
-<%
-for (i = 0; i < 10; i++){
-	if( i <= challenge ){
-%>
-	<script>
-		document.write( <!-- <tr><td> i 回目：i回目の結果</td><td>Hit：i回目の結果<br />Blow：i回目の結果</td></tr>  --> );
-	</script>
-<%	} else { %>
-	<script>
-		document.write( <!-- <tr><td> i 回目：？？？？</td><td>Hit：？<br />Blow：？</td></tr>  --> );
-	</script>
-<%}%>
-
-
-
 	<tr>
 		<td>1回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>2回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>3回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>4回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>5回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>6回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>7回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>8回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>9回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
 	</tr>
-	
+
 	<tr>
 		<td>10回目:？？？？</td>
 		<td>Hit:？<br />Blow:？</td>
@@ -149,8 +134,8 @@ for (i = 0; i < 10; i++){
 <label name="3rd"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 <label name="4th"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 
-<form style="float:right">
-<button type="button" action="※サーバーURL" method="post" style="width:120px; height:50px; margin-top:70px; margin-right:200px;" value="OK">OK</button><br />
+<form action="/masterMind/Result" method="post" style="float:right">
+<input type="submit" style="width:120px; height:50px; margin-top:70px; margin-right:200px;" value="OK" /><br />
 <button type="button" onclick="reSet()" style="width:120px; height:50px; margin-top:10px;">reset</button>
 </form>
 </div>
