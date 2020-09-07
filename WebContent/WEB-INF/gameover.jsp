@@ -16,7 +16,7 @@ int challenge = resultList.size();
 <meta name="viewport" content="width=device-width" />
 <title>マスターマインド</title>
 <link rel="stylesheet" href="cssFile.css">
-<script src="javaScriptFile"></script>
+<script src="javaScriptFile.js"></script>
 </head>
 <body>
 <h1>MasterMindゲーム</h1>

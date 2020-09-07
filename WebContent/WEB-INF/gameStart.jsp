@@ -1,13 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="java.util.ArrayList,teamMasterMind.PlayerResult" %>
-<%
-ArrayList<PlayerResult> resultList = ( ArrayList<PlayerResult> ) session.getAttribute("resultList");
-//Arrayリストに入っている要素の数を取得
-int challenge = resultList.size();
-%>
-
-
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
 <head>
@@ -15,10 +7,9 @@ int challenge = resultList.size();
 <meta name="viewport" content="width=device-width" />
 <title>マスターマインド</title>
 <link rel="stylesheet" href="cssFile.css">
-<script src="javaScriptFile.js"></script>
+<script src="javaScriptFile"></script>
 <script>
 <!--
-
 //選択されている番号を示す変数
 var count = 0;
 
@@ -85,18 +76,55 @@ function reSet(){
 
 <table style="float:left; margin-right:50px;" border="1" width="20%" height="500">
 <caption style="text-align:left;">履歴</caption>
+	<tr>
+		<td>1回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
 
-<!-- 履歴表の表示 -->
-<%
-for (int i = 0; i < 10; i++){
-	if( i < challenge ){
-%>
-<tr><td><%= i + 1 %>回目：<%= resultList.get(i).getPlayerResult() %></td><td>Hit：<%= resultList.get(i).getHit() %><br />Blow：<%= resultList.get(i).getBlow()  %></td></tr>
+	<tr>
+		<td>2回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
 
-<%	} else { %>
-<tr><td>？回目：？？？？</td><td>Hit：？<br />Blow：？</td></tr>
-<%  }	} %>
+	<tr>
+		<td>3回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
 
+	<tr>
+		<td>4回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
+
+	<tr>
+		<td>5回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
+
+	<tr>
+		<td>6回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
+
+	<tr>
+		<td>7回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
+
+	<tr>
+		<td>8回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
+
+	<tr>
+		<td>9回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
+
+	<tr>
+		<td>10回目:？？？？</td>
+		<td>Hit:？<br />Blow:？</td>
+	</tr>
 </table>
 
 <!-- 上段数字 -->
@@ -107,7 +135,8 @@ for (int i = 0; i < 10; i++){
 <label name="4th"><img src="number/number0.png" class="number" height="150" width="11%" style="margin-top:30px; margin-right:20px;" /></label>
 
 <form action="/masterMind/Result" method="post" style="float:right">
-<input type="submit" style="width:120px; height:50px; margin-top:70px; margin-right:200px;" value="OK" /><br />
+<input type="submit" onmouseover="" style="width:120px; height:50px; margin-top:70px; margin-right:200px;" value="OK" /><br />
+<input type="hidden" name="playerNumber" value="">
 <button type="button" onclick="reSet()" style="width:120px; height:50px; margin-top:10px;">reset</button>
 </form>
 </div>

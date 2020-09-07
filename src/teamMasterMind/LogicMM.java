@@ -74,7 +74,7 @@ public class LogicMM {
 			}
 		}
 
-		//hit の判定 ヒットが4なら「おめでとう」と表示してbreakで終わり
+		//hit の判定 ヒットが4ならゲームクリア画面
 		if (hit == 4) {
 			judge = true;
 		} else {
