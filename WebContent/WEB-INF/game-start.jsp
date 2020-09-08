@@ -5,82 +5,83 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<title>ƒ}ƒXƒ^[ƒ}ƒCƒ“ƒh</title>
+<title>ãƒžã‚¹ã‚¿ãƒ¼ãƒžã‚¤ãƒ³ãƒ‰</title>
 <link rel="stylesheet" href="css/cssFile.css">
-<script type="text/javascript" src="js/javaScriptFile.js" ></script>
+<script src="js/javaScriptFile.js"></script>
 
 </head>
 <body onload="selectBtn()">
-<h1>MasterMindƒQ[ƒ€</h1>
+<h1>MasterMindã‚²ãƒ¼ãƒ </h1>
 
 <table class="rireki" border="1">
-<caption>—š—ð</caption>
+<caption>å±¥æ­´</caption>
 	<tr>
-		<td>1‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>1å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>2‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>2å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>3‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>3å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>4‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>4å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>5‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>5å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>6‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>6å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>7‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>7å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>8‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>8å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>9‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>9å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 
 	<tr>
-		<td>10‰ñ–Ú:HHHH</td>
-		<td>Hit:H<br />Blow:H</td>
+		<td>10å›žç›®:ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ</td>
+		<td>Hit:ï¼Ÿ<br />Blow:ï¼Ÿ</td>
 	</tr>
 </table>
 
-<!-- ã’i”Žš -->
+<!-- ä¸Šæ®µæ•°å­— -->
 <div>
-<img src="number/number0.png" onclick="select(0)" class="number" />
-<img src="number/number0.png" onclick="select(1)" class="number" />
-<img src="number/number0.png" onclick="select(2)" class="number" />
-<img src="number/number0.png" onclick="select(3)" class="number" />
+<img src="number/number0.png" name="numberSelect" onclick="select(0)" class="number" />
+<img src="number/number0.png" name="numberSelect" onclick="select(1)" class="number" />
+<img src="number/number0.png" name="numberSelect" onclick="select(2)" class="number" />
+<img src="number/number0.png" name="numberSelect" onclick="select(3)" class="number" />
 
-<form action="/masterMind/Result" method="post">
-<input type="submit" onmouseover="" value="OK" /><br />
+<!-- é€ä¿¡ãƒœã‚¿ãƒ³ã€ãƒªã‚»ãƒƒãƒˆãƒœã‚¿ãƒ³  -->
+<form action="/masterMind/index.html" method="post">
+<input type="submit" onmouseover="setValue()" value="OK" /><br />
 <input type="hidden" name="playerNumber" value="">
 <button type="button" onclick="reSet()">reset</button>
 </form>
 </div>
 
-<!-- ‘I‘ðƒ{ƒ^ƒ“ -->
+<!-- é¸æŠžãƒœã‚¿ãƒ³ -->
 <div>
 <table class="selectTable">
 <tr>
@@ -92,7 +93,7 @@
 </table>
 </div>
 
-<!-- numberƒ{ƒ^ƒ“  -->
+<!-- numberãƒœã‚¿ãƒ³  -->
 <div>
 <table class="miniNumberTable">
 <tr>

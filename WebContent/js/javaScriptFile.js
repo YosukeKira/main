@@ -56,3 +56,16 @@ function reSet(){
 	count = 0;
 	selectBtn();
 }
+
+//数字を送信するための処理
+function setValue(){
+	var postNumber = "";
+	document.getElementsByName("playerNumber")[0].value = "";
+	var imgContent = document.getElementsByName("numberSelect");
+	for (i = 0; i < 4; i++) {
+		var imgUrl = imgContent[i].src;
+		var n = imgUrl.lastIndexOf(".png");
+		postNumber += imgUrl.charAt(n-1);
+	}
+	document.getElementsByName("playerNumber")[0].value = postNumber;
+}

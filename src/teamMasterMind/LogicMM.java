@@ -7,7 +7,7 @@ public class LogicMM {
 		//CPUの数字をインスタンスから取り出す
 		String ansStr = cpu.getAnsNum();
 		int ansNum = Integer.parseInt(ansStr);
-		System.out.println(ansStr);
+//		System.out.println(ansStr); //テスト用
 		// cpuの数字を4つに分解
 		int[] ans = new int[4];
 		ans[0] = ansNum / 1000;
@@ -77,10 +77,9 @@ public class LogicMM {
 		//hit の判定 ヒットが4ならゲームクリア画面
 		if (hit == 4) {
 			judge = true;
-		} else {
-			result.setHit( String.valueOf(hit) );
-			result.setBlow( String.valueOf(blow) );
 		}
+		result.setHit( String.valueOf(hit) );
+		result.setBlow( String.valueOf(blow) );
 
 		return judge;
 	}

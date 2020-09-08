@@ -2,12 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList,teamMasterMind.PlayerResult,teamMasterMind.AnsNum" %>
 <%
+AnsNum cpu = (AnsNum) session.getAttribute("cpu");
 ArrayList<PlayerResult> resultList = ( ArrayList<PlayerResult> ) session.getAttribute("resultList");
-AnsNum cpuAns = (AnsNum) session.getAttribute("cpu");
 //Arrayリストに入っている要素の数を取得
 int challenge = resultList.size();
 %>
-
 
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
@@ -15,7 +14,7 @@ int challenge = resultList.size();
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
 <title>マスターマインド</title>
-<link rel="stylesheet" href="css/cssFile.css">
+<link rel="stylesheet" href="css/cssFile.css" />
 <script src="js/javaScriptFile.js"></script>
 </head>
 <body>
@@ -24,7 +23,7 @@ int challenge = resultList.size();
 <table class="rireki" border="1">
 <caption>履歴</caption>
 
-<!-- 結果表の表示 -->
+<!-- 履歴表の表示 -->
 <%
 for (int i = 0; i < 10; i++){
 	if( i < challenge ){
@@ -37,14 +36,14 @@ for (int i = 0; i < 10; i++){
 
 </table>
 
-<h1>正解の数字</h1>
+<h1>おめでとうございます！正解です！</h1>
 <br />
-<p>正解は・・・<span><%= cpuAns.getAnsNum() %></span>でした</p>
+<p><%= challenge %>回目の挑戦で正解しました！</p>
+<p>おめでとうございます！天才！！</p>
 <br />
 <hr />
-<p><a href="/masterMind/">もう一度遊ぶ</a></p>
-<p><a href="/masterMind/">TOPへ</a></p>
+<p>正解の数字：<span><%= cpu.getAnsNum() %></span></p>
 <%-- セッションスコープの削除 --%>
-<% session.invalidate(); %>
+<% session.invalidate();%>
 </body>
 </html>

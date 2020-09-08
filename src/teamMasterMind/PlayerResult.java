@@ -7,10 +7,8 @@ public class PlayerResult implements java.io.Serializable {
 
 	public PlayerResult() {}
 
-	public PlayerResult( String playerResult, String hit, String blow ) {
+	public PlayerResult( String playerResult) {
 		this.playerResult = playerResult;
-		this.setHit(hit);
-		this.setBlow(blow);
 	}
 
 
