@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="java.util.ArrayList,teamMasterMind.PlayerResult" %>
+<%@page import="java.util.ArrayList,teamMasterMind.PlayerResult,teamMasterMind.AnsNum" %>
 <%
+AnsNum cpu = (AnsNum) session.getAttribute("cpu");
 ArrayList<PlayerResult> resultList = ( ArrayList<PlayerResult> ) session.getAttribute("resultList");
 //Arrayリストに入っている要素の数を取得
 int challenge = resultList.size();
@@ -103,6 +104,11 @@ for (int i = 0; i < 10; i++){
 <br />
 <p><%= challenge %>回目の挑戦で正解しました！</p>
 <p>おめでとうございます！天才！！</p>
-
+<br />
+<hr />
+<p>正解の数字：<%= cpu.getAnsNum() %></p>
+<%
+	session.invalidate();
+%>
 </body>
 </html>
